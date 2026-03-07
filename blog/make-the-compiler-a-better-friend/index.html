@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="robots" content="index, follow">
+        
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="https://syntax-and-servos.ch/rss.xml">
+        
+        <title> | Make the compiler a better friend (aka parse, don&#x27;t validate)</title>
+
+        <link rel="preload" href="https://syntax-and-servos.ch/css/style.css" as="style">
+        <link rel="stylesheet" href="https://raw.githack.com/Speyll/suCSS/main/reset-min.css" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://raw.githack.com/Speyll/suCSS/main/suCSS-min.css" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://syntax-and-servos.ch/css/style.css">
+        <link rel="stylesheet" href="https://syntax-and-servos.ch/css/custom.css">
+
+        <!-- Add favicon with appropriate sizes -->
+        <link rel="icon" href="https:&#x2F;&#x2F;syntax-and-servos.ch/favicon.ico">
+        
+    </head>
+    <body>
+        
+        
+        
+        
+        <nav id="nav-bar">
+            
+            <a href="&#x2F;blog" class="">
+                
+                &#x2F;blog&#x2F;
+            </a>
+            
+            <a href="&#x2F;about" class="">
+                
+                &#x2F;about&#x2F;
+            </a>
+            
+
+            <div class="theme-toggle" id="theme-toggle" role="button" tabindex="0" aria-label="Toggle theme"
+                data-icon-base="https://syntax-and-servos.ch/icons.svg"
+                data-icon-dark="#darkMode"
+                data-icon-light="#lightMode"
+                data-sound-src="https://syntax-and-servos.ch/click.ogg">
+                <svg class="icon">
+                    <use id="theme-icon"></use>
+                </svg>
+            </div>
+        </nav>
+
+        <main>
+            
+<article class="post">
+    <header class="post-header">
+        
+        <time datetime="2026-03-07">Published on:
+            <span class="accent-data">2026-03-07</span>
+        </time>
+        
+
+        
+        <address rel="author">By
+            <span class="accent-data">Sandro</span>
+        </address>
+        
+
+        <h1>Make the compiler a better friend (aka parse, don&#x27;t validate)</h1>
+    </header>
+
+
+
+    <div class="post-content">
+        <p><strong>TL;DR</strong>: We engineers have a very limited context window and robots have a lot of state to be kept track of in software and our heads. Let's make our lives easier by making invalid state unrepresentable! Then the compiler or type checker becomes your best friend and frees up essential space in your head by taking care of all these errors at compile time!</p>
+<h2 id="parse-don-t-validate">Parse, don't validate</h2>
+<p>I first encountered the concept of "parse, don't validate" in <a rel="external" href="https://lexi-lambda.github.io/blog/2019/11/05/parse-don-t-validate/">Alexis King's article</a>. Even though the examples are in haskell, a language I'm not familiar with, they resonated immediately with me. The <a rel="external" href="https://www.harudagondi.space/blog/parse-dont-validate-and-type-driven-design-in-rust/">recent article of the same pattern in Rust by Gio</a> reminded me once again why it is so powerful. The idea is simple: Incorporate as much information as possible in the types such that the compiler or type checker can validate it at compile time or type check time respectively.</p>
+<p>Let's dive into it with <strong>real world robotics</strong> examples in python and C++ from the <a rel="external" href="https://gravisrobotics.com">Gravis Robotics</a> codebase!</p>
+<h2 id="python-example-leveraging-wrapper-types-to-avoid-wrong-robot-identifier">Python Example: Leveraging wrapper types to avoid wrong robot identifier</h2>
+<p>Note: Python supports typing out of the box, however needs third party tooling for type verification such as  <a rel="external" href="https://pyrefly.org">pyrefly</a>, <a rel="external" href="https://github.com/DetachHead/basedpyright">basedpyright</a> or <a rel="external" href="https://docs.astral.sh/ty/">ty</a>. We recommend to leverage these tools similar to a compiler, to verify types at type check time (e.g. in editor, CI or both)</p>
+<p>At <a rel="external" href="https://gravisrobotics.com">Gravis</a> each robot has a name. e.g. <code>bob-the-builder</code>. In addition each machine has a globally unique identifier: <code>robot/bob-the-builder</code> (we use the <a rel="external" href="https://docs.cloud.google.com/apis/design">Google API guideline</a> as a reference). For historical reasons we often use the robot name in on-robot software without the <code>robot/</code> prefix. As you imagine we eventually had bugs in our software where the robot name was used instead of the identifier and vice versa. They are not hard to track down, but annoying. The newtype pattern in combination with a type checker eliminates the possibility of this class of problems.</p>
+<p>Error prone code would look like this:</p>
+<pre class="giallo" style="color: #24292E; background-color: #FFFFFF;"><code data-lang="python"><span class="giallo-l"><span style="color: #D73A49;">class</span><span style="color: #6F42C1;"> TaskDefinition</span><span>:</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    def</span><span style="color: #005CC5;"> __init__</span><span>(self, robot:</span><span style="color: #005CC5;"> str</span><span>, ...):</span></span>
+<span class="giallo-l"><span style="color: #6A737D;">        # The globally unique identifier of the robot</span></span>
+<span class="giallo-l"><span style="color: #005CC5;">        self</span><span>._robot:</span><span style="color: #005CC5;"> str</span><span style="color: #D73A49;"> =</span><span> robot</span></span>
+<span class="giallo-l"><span style="color: #005CC5;">        ...</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #D73A49;">class</span><span style="color: #6F42C1;"> TaskExecutor</span><span>:</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    def</span><span style="color: #6F42C1;"> execute</span><span>(self, task_definition: TaskDefinition):</span></span>
+<span class="giallo-l"><span style="color: #005CC5;">        ...</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #D73A49;">def</span><span style="color: #6F42C1;"> start_task</span><span>(task_executor: TaskExecutor): </span></span>
+<span class="giallo-l"><span>    robot_name:</span><span style="color: #005CC5;"> str</span><span style="color: #D73A49;"> =</span><span style="color: #032F62;"> &quot;robo42&quot;</span><span style="color: #6A737D;"> # Note: no &quot;robot/&quot; prefix</span></span>
+<span class="giallo-l"><span>    task_definition</span><span style="color: #D73A49;"> =</span><span> TaskDefinition(</span><span style="color: #E36209;">robot</span><span style="color: #D73A49;">=</span><span>robot_name,</span><span style="color: #005CC5;"> ...</span><span>)</span></span>
+<span class="giallo-l"><span>    task_executor.execute(task_definition) </span></span></code></pre>
+<p>Note how we have semantic information in the comment in <code>TaskDefinition</code>. We <strong>hope</strong> that fellow engineers read the comments and adhere to it. In the best case the <code>task_executor</code> does validation on the <code>task_definition</code> and fails quickly. In the worst case it will fail only sometime later, when a piece of code assumes that <code>task_definition._robot</code> is prefixed with <code>robot/</code>. This increases our <a rel="external" href="https://minds.md/zakirullin/cognitive">cognitive load</a>, which takes energy from the actual task we are working on.</p>
+<p>Let's fix this by incorporating that information into the type system such that the type checker can help us.</p>
+<p>By introducing a <code>RobotIdentifier</code> type we can distinguish the robot name from the identifier and design an API that makes it impossible to mix up the two things:</p>
+<pre class="giallo" style="color: #24292E; background-color: #FFFFFF;"><code data-lang="python"><span class="giallo-l"><span style="color: #D73A49;">from</span><span> typing</span><span style="color: #D73A49;"> import</span><span> NewType</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>RobotName</span><span style="color: #D73A49;"> =</span><span> NewType(</span><span style="color: #032F62;">&#39;RobotName&#39;</span><span>,</span><span style="color: #005CC5;"> str</span><span>)</span></span>
+<span class="giallo-l"><span>RobotIdentifier</span><span style="color: #D73A49;"> =</span><span> NewType(</span><span style="color: #032F62;">&#39;RobotIdentifier&#39;</span><span>,</span><span style="color: #005CC5;"> str</span><span>)</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #D73A49;">def</span><span style="color: #6F42C1;"> robot_identifier_from_name</span><span>(name: RobotName) -&gt; RobotIdentifier:</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    return</span><span> RobotIdentifier(</span><span style="color: #D73A49;">f</span><span style="color: #032F62;">&quot;robot/</span><span style="color: #005CC5;">{</span><span>name</span><span style="color: #005CC5;">}</span><span style="color: #032F62;">&quot;</span><span>)</span></span></code></pre>
+<p>Now we change the <code>TaskDefinition</code> to accept a <code>RobotIdentifier</code> instead of a <code>str</code>:</p>
+<pre class="giallo" style="color: #24292E; background-color: #FFFFFF;"><code data-lang="python"><span class="giallo-l"><span style="color: #D73A49;">class</span><span style="color: #6F42C1;"> TaskDefinition</span><span>:</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    def</span><span style="color: #005CC5;"> __init__</span><span>(self, robot: RobotIdentifier, ...):</span></span>
+<span class="giallo-l"><span style="color: #6A737D;">        # The globally unique identifier of the robot</span></span>
+<span class="giallo-l"><span style="color: #005CC5;">        self</span><span>._robot: RobotIdentifier</span><span style="color: #D73A49;"> =</span><span> robot</span></span>
+<span class="giallo-l"><span style="color: #005CC5;">        ...</span></span></code></pre>
+<p>With this small change, we have made the code safe for accidential mixups of robot names and global robot identifiers. The typechecker will report</p>
+<pre class="giallo" style="color: #24292E; background-color: #FFFFFF;"><code data-lang="plain"><span class="giallo-l"><span>Argument `str` is not assignable to parameter  `robot` with type `RobotIdentifier` in function `TaskDefinition.__init__`</span></span></code></pre>
+<p>Not only are we now very explicit in the API that we expect a global robot identifier we also provide the semantic information to the type checker, which can warn us if we use the wrong type when creating the <code>TaskDefinition</code>. Just by introducing these new types we eliminated a whole category of errors!</p>
+<h2 id="c-example-migrating-hardware-version-numbers">C++ Example: Migrating hardware version numbers</h2>
+<p>We recently changed our hardware versioning schema and needed to propagate this change to our code. The schema changed from <code>123</code> (a plain number, but often used with a prefix, e.g. <code>hw-123</code>) to <code>hw-9876-123456</code>. The old serial number was accessed via a free standing function:</p>
+<pre class="giallo" style="color: #24292E; background-color: #FFFFFF;"><code data-lang="cpp"><span class="giallo-l"><span>import </span><span style="color: #D73A49;">&lt;</span><span>cstdint</span><span style="color: #D73A49;">&gt;</span><span> </span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;">/**</span></span>
+<span class="giallo-l"><span style="color: #6A737D;"> * Returns the serial number of the hardware.</span></span>
+<span class="giallo-l"><span style="color: #6A737D;"> */</span></span>
+<span class="giallo-l"><span style="color: #005CC5;">[[</span><span style="color: #6F42C1;">nodiscard</span><span style="color: #005CC5;">]]</span><span style="color: #D73A49;"> uint32_t</span><span style="color: #6F42C1;"> getSerialNumber</span><span>();</span></span></code></pre>
+<p>As you can see the old format was just represented as an <code>uint32_t</code>. Remember that we have hardware of different versions concurrently in the field. Therefore we expect hardware with the old and the new format to live concurrently for quite a while. The quick change here would have been to just change the return type of <code>getSerialNumber()</code> to <code>std::string</code> and use the function as is. I.e. <code>getSerialNumber()</code> would return a string that either looks like <code>123</code> or <code>hw-9876-123456</code>. The type system would help us find all the usages as existing callers expect an <code>uint32_t</code> instead of a string. Let's improve this further by giving even more information to the compiler to support us further! We give the compiler information about both types of serial numbers, old and new ones:</p>
+<pre class="giallo" style="color: #24292E; background-color: #FFFFFF;"><code data-lang="cpp"><span class="giallo-l"><span>import </span><span style="color: #D73A49;">&lt;</span><span>cstdint</span><span style="color: #D73A49;">&gt;</span></span>
+<span class="giallo-l"><span>import </span><span style="color: #D73A49;">&lt;</span><span>string</span><span style="color: #D73A49;">&gt;</span></span>
+<span class="giallo-l"><span>import </span><span style="color: #D73A49;">&lt;</span><span>variant</span><span style="color: #D73A49;">&gt;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #D73A49;">using</span><span style="color: #6F42C1;"> SerialNumber</span><span style="color: #D73A49;"> =</span><span style="color: #6F42C1;"> std</span><span>::</span><span style="color: #6F42C1;">variant</span><span>&lt;</span><span style="color: #D73A49;">uint32_t</span><span>,</span><span style="color: #6F42C1;"> std</span><span>::</span><span style="color: #6F42C1;">string</span><span>&gt;;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #005CC5;">[[</span><span style="color: #6F42C1;">nodiscard</span><span style="color: #005CC5;">]]</span><span style="color: #6F42C1;"> SerialNumber getSerialNumber</span><span>(); </span></span></code></pre>
+<p>With this, we force our future selves to think about both cases whenever we use the <code>getSerialNumber()</code> function. This prevents a software engineer not familiar with new serial numbers just prepending <code>hw-</code> to whatever they get back from <code>getSerialNumber()</code>. Note that exactly this situation would create a bug that we would only detect at runtime. By forcing the caller to take care of both variants we move these mistakes to compile time!</p>
+<p>Note: It might be tempting to use <code>using LegacySerialNumer = uint32_t</code> to create something similar to python's <code>NewType</code>. This does not work as <code>using</code> only creates a type alias. There are other options however. For example Boost's  <a rel="external" href="https://www.boost.org/doc/libs/1_61_0/libs/serialization/doc/strong_typedef.html">BOOST_STRONG_TYPEDEF</a> library or defining custom structs or classes as described in this <a rel="external" href="https://www.fluentcpp.com/2016/12/05/named-constructors/">fluentcpp article</a>. And there is first proof of concepts of doing this with <a rel="external" href="https://www.reddit.com/r/cpp/comments/1rgo4s9/power_of_c26_reflection_strong_opaque_type/">reflection in C++26</a>.</p>
+<h2 id="summary">Summary</h2>
+<p>If illegal state is unrepresentable, the compiler will help you avoid it. In compiled languages, it will be compile time errors and in dynamic languages, a type checker can help us avoid it. To get there you need to give the information to the compiler/type checker to be able to help you. Therefore, don't be mean and withhold information from the compiler.</p>
+<p><strong>Make the compiler a better friend by giving it what it needs to help you!</strong></p>
+
+    </div>
+
+    
+</article>
+
+        </main>
+
+        <footer>
+            <hr>
+<div id="footer-container">
+    <p>Made using <a target="_blank" rel="noopener noreferrer" href="https://github.com/Speyll/anemone">anemone</a> Zola theme</p>
+</div>
+
+        </footer>
+
+        <!-- Move JS to end of body and add defer -->
+        <script src="https://syntax-and-servos.ch/js/script.js" defer></script>
+    </body>
+</html>
