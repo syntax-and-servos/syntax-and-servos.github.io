@@ -3,7 +3,7 @@
     <title></title>
     <link href="https://syntax-and-servos.ch/atom.xml" rel="self"/>
     <link href="https:&#x2F;&#x2F;syntax-and-servos.ch"/>
-    <updated>2026-03-25T09:26:17+0000</updated>
+    <updated>2026-04-11T20:02:48+0000</updated>
     <id>https:&#x2F;&#x2F;syntax-and-servos.ch</id>
 
     
@@ -15,6 +15,32 @@
     
     
         
+        
+            
+            <entry>
+                <title>Software Engineering Craftsmen</title>
+                <link href="https:&#x2F;&#x2F;syntax-and-servos.ch&#x2F;blog&#x2F;software-engineering-craftsmen&#x2F;"/>
+                <updated>2026-04-11T00:00:00+0000</updated>
+                <id>https:&#x2F;&#x2F;syntax-and-servos.ch&#x2F;blog&#x2F;software-engineering-craftsmen&#x2F;</id>
+                <content type="html">&amp;lt;blockquote&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;a rel=&amp;quot;external&amp;quot; href=&amp;quot;https:&amp;#x2F;&amp;#x2F;www.britannica.com&amp;#x2F;dictionary&amp;#x2F;craft&amp;quot;&amp;gt;&amp;lt;strong&amp;gt;craft&amp;lt;&amp;#x2F;strong&amp;gt;&amp;lt;&amp;#x2F;a&amp;gt;&amp;lt;&amp;#x2F;p&amp;gt;
+&amp;lt;p&amp;gt;To make or produce something with care or skill.&amp;lt;&amp;#x2F;p&amp;gt;
+&amp;lt;&amp;#x2F;blockquote&amp;gt;
+&amp;lt;p&amp;gt;Software is a craft. Every software craftsman produces code with care and skill, but not everyone who produces code is a craftsman. Let&amp;#x27;s explore what software craftsman have in common besides the fascination for their craft!&amp;lt;&amp;#x2F;p&amp;gt;
+&amp;lt;hr &amp;#x2F;&amp;gt;
+&amp;lt;h2 id=&amp;quot;a-piece-of-art&amp;quot;&amp;gt;A piece of art&amp;lt;&amp;#x2F;h2&amp;gt;
+&amp;lt;p&amp;gt;When usability, aesthetics and functionality are melted into one, we have a piece of art. Behind such a piece is craftsman. Someone who loves what they do and excels at it. The result sparks joy when used while fulfilling its purpose. For industries where the output is a physical product, craftsmanship is often easy to spot. For example, a beautifully designed and crafted wooden peppermill is easily distinguished from a mass market product that only focuses on functionality. In that case we associate aesthetics with a &amp;lt;em&amp;gt;piece of art&amp;lt;&amp;#x2F;em&amp;gt;. But that‘s where the comparison with a piece of (software) art from a craftsman breaks down. What is aesthetic when it comes to software: the source code? The front-end? While the former is only visible by the craftsman, the latter can easily be deceiving. It is much easier to hide sloppy code behind a nice looking front than it is to use bad quality wood to create a good looking wooden cabinet. Especially in the age of LLM where making a good looking &amp;quot;product&amp;quot; is a matter of hours. While it is harder to grasp what the output of a software craftsman looks like we can describe the craftsmen themselves. Independent of AI tooling usage, they all share a rather common set of traits:&amp;lt;&amp;#x2F;p&amp;gt;
+&amp;lt;h2 id=&amp;quot;common-traits-of-software-craftsmen&amp;quot;&amp;gt;Common traits of software craftsmen&amp;lt;&amp;#x2F;h2&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;A love for their craft&amp;lt;&amp;#x2F;strong&amp;gt;: The programming languages they use are more than just tools. They are fascinated by their internals, the roadmap of the language designers and the abstract concepts simplifying complex problems. They &amp;quot;inhale&amp;quot; abstract concept for fun and build their own tooling, similiar to how a handyman builds jigs.&amp;lt;&amp;#x2F;li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;A fascination that goes beyond work&amp;lt;&amp;#x2F;strong&amp;gt;: They work on technical projects outside work. Not to optimize their portfolio for their next job but simply because they enjoy it. They get satisfaction, even relaxation from solving technical challenges or exploring new solutions and technologies.&amp;lt;&amp;#x2F;li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;A pull towards other craftsmen&amp;lt;&amp;#x2F;strong&amp;gt;: Whenever I found a craftsman in an organization there was almost always more than one. Craftsmen in an organization gravitate towards each other. I observed that if they don&amp;#x27;t find others they usually leave quite quickly, to join other craftsmen somewhere else.&amp;lt;&amp;#x2F;li&amp;gt;
+&amp;lt;&amp;#x2F;ul&amp;gt;
+&amp;lt;p&amp;gt;These traits make craftsmen inspiring people. They share their excitement with others, inspiring them. There is another group of people who share these traits: artists. They also love their craft, are fascinated by it and are pulled towards other artists.&amp;lt;&amp;#x2F;p&amp;gt;
+&amp;lt;p&amp;gt;When looking at them in a business context, there is a significant difference: craftsmen are aware of business objectives, artists tend to do their work for the sake of the art piece. At the same time, a craftsmen would say that a suboptimal solution achieved with minimal resources that works right before an important customer demo is a piece of art. Are we robotic software engineers therefore all artists?&amp;lt;&amp;#x2F;p&amp;gt;
+</content>
+            </entry>
+            
         
             
             <entry>
