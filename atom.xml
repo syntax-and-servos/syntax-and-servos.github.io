@@ -3,7 +3,7 @@
     <title></title>
     <link href="https://syntax-and-servos.ch/atom.xml" rel="self"/>
     <link href="https:&#x2F;&#x2F;syntax-and-servos.ch"/>
-    <updated>2026-04-11T20:02:48+0000</updated>
+    <updated>2026-06-02T06:33:38+0000</updated>
     <id>https:&#x2F;&#x2F;syntax-and-servos.ch</id>
 
     
@@ -15,6 +15,77 @@
     
     
         
+        
+            
+            <entry>
+                <title>Write explicit code</title>
+                <link href="https:&#x2F;&#x2F;syntax-and-servos.ch&#x2F;blog&#x2F;explicit-code&#x2F;"/>
+                <updated>2026-06-02T00:00:00+0000</updated>
+                <id>https:&#x2F;&#x2F;syntax-and-servos.ch&#x2F;blog&#x2F;explicit-code&#x2F;</id>
+                <content type="html">&amp;lt;p&amp;gt;You get assigned a Pull request, open it and see a method definition&amp;lt;&amp;#x2F;p&amp;gt;
+&amp;lt;pre class=&amp;quot;giallo&amp;quot; style=&amp;quot;color: #24292E; background-color: #FFFFFF;&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;cpp&amp;quot;&amp;gt;&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #D73A49;&amp;quot;&amp;gt;class&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span style=&amp;quot;color: #6F42C1;&amp;quot;&amp;gt; LearningMotionController&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span&amp;gt; {&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #D73A49;&amp;quot;&amp;gt;    void&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span style=&amp;quot;color: #6F42C1;&amp;quot;&amp;gt; extractPolicyInfo&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span&amp;gt;();&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span&amp;gt;};&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;code&amp;gt;&amp;lt;&amp;#x2F;pre&amp;gt;
+&amp;lt;p&amp;gt;and immediately wonder: Extract from what? Extract to where?&amp;lt;&amp;#x2F;p&amp;gt;
+&amp;lt;p&amp;gt;Congratulations! You just found a piece of code that is not explicit about its intent. It probably does a lot, but you just don&amp;#x27;t know what. It&amp;#x27;s all hidden in the implementation.&amp;lt;&amp;#x2F;p&amp;gt;
+&amp;lt;p&amp;gt;While hiding implementation details is good, it is hard to strike the right balance between exposing details and hiding them. When reading code I like it to be explicit about its intent. Code that tells me what it does. Code that doesn&amp;#x27;t leave me guessing. Code that is easy to read, understand and most importantly easy to reason about.&amp;lt;&amp;#x2F;p&amp;gt;
+&amp;lt;h2 id=&amp;quot;implicit-code-increases-cognitive-load&amp;quot;&amp;gt;Implicit code increases &amp;lt;a rel=&amp;quot;external&amp;quot; href=&amp;quot;https:&amp;#x2F;&amp;#x2F;github.com&amp;#x2F;zakirullin&amp;#x2F;cognitive-load&amp;quot;&amp;gt;cognitive load&amp;lt;&amp;#x2F;a&amp;gt;&amp;lt;&amp;#x2F;h2&amp;gt;
+&amp;lt;p&amp;gt;Consider the following class:&amp;lt;&amp;#x2F;p&amp;gt;
+&amp;lt;pre class=&amp;quot;giallo&amp;quot; style=&amp;quot;color: #24292E; background-color: #FFFFFF;&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;cpp&amp;quot;&amp;gt;&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #6A737D;&amp;quot;&amp;gt;&amp;#x2F;**&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #6A737D;&amp;quot;&amp;gt; * A class that controls a robotic arm given a learned policy. &amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #6A737D;&amp;quot;&amp;gt; *&amp;#x2F;&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #D73A49;&amp;quot;&amp;gt;class&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span style=&amp;quot;color: #6F42C1;&amp;quot;&amp;gt; LearningMotionController&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span&amp;gt; {&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #D73A49;&amp;quot;&amp;gt;    public:&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #D73A49;&amp;quot;&amp;gt;    explicit&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span style=&amp;quot;color: #6F42C1;&amp;quot;&amp;gt; LearningMotionController&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span&amp;gt;(&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span style=&amp;quot;color: #6F42C1;&amp;quot;&amp;gt;Parameters&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span style=&amp;quot;color: #E36209;&amp;quot;&amp;gt; params&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span&amp;gt;);&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span&amp;gt;    &amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #6A737D;&amp;quot;&amp;gt;    &amp;#x2F;**&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #6A737D;&amp;quot;&amp;gt;     * Given the parameters in params_ it extracts the policy info and puts&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #6A737D;&amp;quot;&amp;gt;     * them into policyInfo_.&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #6A737D;&amp;quot;&amp;gt;     *&amp;#x2F;&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #D73A49;&amp;quot;&amp;gt;    void&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span style=&amp;quot;color: #6F42C1;&amp;quot;&amp;gt; extractPolicyInfo&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span&amp;gt;();&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span&amp;gt;      &amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #D73A49;&amp;quot;&amp;gt;    private:&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span&amp;gt;      Parameters params_;&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span&amp;gt;      PolicyInfo policyInfo_;&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span&amp;gt;};&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;code&amp;gt;&amp;lt;&amp;#x2F;pre&amp;gt;
+&amp;lt;p&amp;gt;It&amp;#x27;s great that the docstring on &amp;lt;code&amp;gt;extractPolicyInfo()&amp;lt;&amp;#x2F;code&amp;gt; explains what it does. However, comments tend to become outdated and out of sync with the code very quickly. Additionally, if I only look at the code and ignore the comment, it makes me wonder where this data comes from and where it goes. When we find ourselves in this situation we have a couple options:&amp;lt;&amp;#x2F;p&amp;gt;
+&amp;lt;ol&amp;gt;
+&amp;lt;li&amp;gt;Guess what the method or function does&amp;lt;&amp;#x2F;li&amp;gt;
+&amp;lt;li&amp;gt;Dive one abstraction layer lower and understand the internals&amp;lt;&amp;#x2F;li&amp;gt;
+&amp;lt;li&amp;gt;Ask an LLM to dive one abstraction layer lower and summarize the findings.&amp;lt;&amp;#x2F;li&amp;gt;
+&amp;lt;&amp;#x2F;ol&amp;gt;
+&amp;lt;p&amp;gt;None of these options are great. Option 1 leaves us only with a guess. Option 2 forces extra &amp;lt;a rel=&amp;quot;external&amp;quot; href=&amp;quot;https:&amp;#x2F;&amp;#x2F;github.com&amp;#x2F;zakirullin&amp;#x2F;cognitive-load?tab=readme-ov-file#cognitive-load-is-what-matters&amp;quot;&amp;gt;cognitive load&amp;lt;&amp;#x2F;a&amp;gt; on every reader, every time. And Option 3 leaves us experiencing &amp;lt;a rel=&amp;quot;external&amp;quot; href=&amp;quot;https:&amp;#x2F;&amp;#x2F;syntax-and-servos.ch&amp;#x2F;blog&amp;#x2F;agentic-coding-and-unproductive-success&amp;#x2F;&amp;quot;&amp;gt;unproductive success&amp;lt;&amp;#x2F;a&amp;gt;, getting an answer without building real understanding.&amp;lt;&amp;#x2F;p&amp;gt;
+&amp;lt;p&amp;gt;What if we could be more explicit?&amp;lt;&amp;#x2F;p&amp;gt;
+&amp;lt;h2 id=&amp;quot;explicit-code-frees-our-mind-up&amp;quot;&amp;gt;Explicit code frees our mind up&amp;lt;&amp;#x2F;h2&amp;gt;
+&amp;lt;p&amp;gt;By adapting the interface to the following we communicate the intent:&amp;lt;&amp;#x2F;p&amp;gt;
+&amp;lt;pre class=&amp;quot;giallo&amp;quot; style=&amp;quot;color: #24292E; background-color: #FFFFFF;&amp;quot;&amp;gt;&amp;lt;code data-lang=&amp;quot;cpp&amp;quot;&amp;gt;&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #005CC5;&amp;quot;&amp;gt;[[&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span style=&amp;quot;color: #6F42C1;&amp;quot;&amp;gt;nodiscard&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span style=&amp;quot;color: #005CC5;&amp;quot;&amp;gt;]]&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span style=&amp;quot;color: #6F42C1;&amp;quot;&amp;gt; PolicyInfo extractPolicyInfo&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span&amp;gt;(&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span style=&amp;quot;color: #D73A49;&amp;quot;&amp;gt;const&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span style=&amp;quot;color: #6F42C1;&amp;quot;&amp;gt; Parameters&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span style=&amp;quot;color: #D73A49;&amp;quot;&amp;gt;&amp;amp;amp;&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span style=&amp;quot;color: #E36209;&amp;quot;&amp;gt; params&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span&amp;gt;);&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #6A737D;&amp;quot;&amp;gt;&amp;#x2F;**&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #6A737D;&amp;quot;&amp;gt; * A class that controls a robotic arm given a learned policy. &amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #6A737D;&amp;quot;&amp;gt; *&amp;#x2F;&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #D73A49;&amp;quot;&amp;gt;class&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span style=&amp;quot;color: #6F42C1;&amp;quot;&amp;gt; LearningMotionController&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span&amp;gt; {&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #D73A49;&amp;quot;&amp;gt;    public:&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #D73A49;&amp;quot;&amp;gt;    explicit&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span style=&amp;quot;color: #6F42C1;&amp;quot;&amp;gt; LearningMotionController&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span&amp;gt;(&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span style=&amp;quot;color: #6F42C1;&amp;quot;&amp;gt;Parameters&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span style=&amp;quot;color: #E36209;&amp;quot;&amp;gt; params&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span&amp;gt;);&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span&amp;gt;      &amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #D73A49;&amp;quot;&amp;gt;    private:&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span&amp;gt;      PolicyInfo policyInfo_;&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span&amp;gt;};&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #6A737D;&amp;quot;&amp;gt;&amp;#x2F;&amp;#x2F; Implementation&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span style=&amp;quot;color: #6F42C1;&amp;quot;&amp;gt;LearningMotionController&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span&amp;gt;::&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span style=&amp;quot;color: #6F42C1;&amp;quot;&amp;gt;LearningMotionController&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span&amp;gt;(Parameters params)&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;
+&amp;lt;span class=&amp;quot;giallo-l&amp;quot;&amp;gt;&amp;lt;span&amp;gt;    :&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span style=&amp;quot;color: #6F42C1;&amp;quot;&amp;gt; policyInfo_&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span&amp;gt;(&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span style=&amp;quot;color: #6F42C1;&amp;quot;&amp;gt;extractPolicyInfo&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;span&amp;gt;(params)) {}&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;span&amp;gt;&amp;lt;&amp;#x2F;code&amp;gt;&amp;lt;&amp;#x2F;pre&amp;gt;
+&amp;lt;p&amp;gt;Now we can use &amp;lt;code&amp;gt;extractPolicyInfo(const Parameters&amp;amp;amp; params)&amp;lt;&amp;#x2F;code&amp;gt; in the constructor, using the &amp;lt;code&amp;gt;params&amp;lt;&amp;#x2F;code&amp;gt; parameter. The change is minimal but makes the code explicit and communicates the intent. With a single look at the function declaration we can deduce that it extracts the policy information from the given parameters.&amp;lt;&amp;#x2F;p&amp;gt;
+&amp;lt;p&amp;gt;Beyond communicating the intent better, there are other positive changes:&amp;lt;&amp;#x2F;p&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Reduce State&amp;lt;&amp;#x2F;strong&amp;gt;: By giving &amp;lt;code&amp;gt;params&amp;lt;&amp;#x2F;code&amp;gt; explicitly to the &amp;lt;code&amp;gt;extractPolicyInfo&amp;lt;&amp;#x2F;code&amp;gt; method in the constructor there is no need to store it in the &amp;lt;code&amp;gt;params_&amp;lt;&amp;#x2F;code&amp;gt; instance variable. Less state is good because it reduces cognitive load. We are also explicit about what we actually use inside &amp;lt;code&amp;gt;LearningMotionController&amp;lt;&amp;#x2F;code&amp;gt;.&amp;lt;&amp;#x2F;li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Improved Testability&amp;lt;&amp;#x2F;strong&amp;gt;: The free standing function becomes trivial to test as input and output are easily accessible.&amp;lt;&amp;#x2F;li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Possible Dependency Injection&amp;lt;&amp;#x2F;strong&amp;gt;: We could refactor &amp;lt;code&amp;gt;LearningMotionController&amp;lt;&amp;#x2F;code&amp;gt; further such that it only takes what it actually needs: a &amp;lt;code&amp;gt;PolicyInfo&amp;lt;&amp;#x2F;code&amp;gt;.&amp;lt;&amp;#x2F;li&amp;gt;
+&amp;lt;&amp;#x2F;ul&amp;gt;
+&amp;lt;p&amp;gt;The next time you write a method that has no return values, no arguments or both ask yourself: Is the intent of this method obvious to fellow engineers and your future self? If not, then refactor your code to be explicit about its intent!&amp;lt;&amp;#x2F;p&amp;gt;
+</content>
+            </entry>
+            
         
             
             <entry>

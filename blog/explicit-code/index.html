@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="robots" content="index, follow">
+        
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="https://syntax-and-servos.ch/rss.xml">
+        
+        <title> | Write explicit code</title>
+
+        <link rel="preload" href="https://syntax-and-servos.ch/css/style.css" as="style">
+        <link rel="stylesheet" href="https://raw.githack.com/Speyll/suCSS/main/reset-min.css" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://raw.githack.com/Speyll/suCSS/main/suCSS-min.css" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://syntax-and-servos.ch/css/style.css">
+        <link rel="stylesheet" href="https://syntax-and-servos.ch/css/custom.css">
+
+        <!-- Add favicon with appropriate sizes -->
+        <link rel="icon" href="https:&#x2F;&#x2F;syntax-and-servos.ch/favicon.ico">
+        
+    </head>
+    <body>
+        
+        
+        
+        
+        <nav id="nav-bar">
+            
+            <a href="&#x2F;blog" class="">
+                
+                &#x2F;blog&#x2F;
+            </a>
+            
+            <a href="&#x2F;about" class="">
+                
+                &#x2F;about&#x2F;
+            </a>
+            
+
+            <div class="theme-toggle" id="theme-toggle" role="button" tabindex="0" aria-label="Toggle theme"
+                data-icon-base="https://syntax-and-servos.ch/icons.svg"
+                data-icon-dark="#darkMode"
+                data-icon-light="#lightMode"
+                data-sound-src="https://syntax-and-servos.ch/click.ogg">
+                <svg class="icon">
+                    <use id="theme-icon"></use>
+                </svg>
+            </div>
+        </nav>
+
+        <main>
+            
+<article class="post">
+    <header class="post-header">
+        
+        <time datetime="2026-06-02">Published on:
+            <span class="accent-data">2026-06-02</span>
+        </time>
+        
+
+        
+        <address rel="author">By
+            <span class="accent-data">Sandro</span>
+        </address>
+        
+
+        <h1>Write explicit code</h1>
+    </header>
+
+
+
+    <div class="post-content">
+        <p>You get assigned a Pull request, open it and see a method definition</p>
+<pre class="giallo" style="color: #24292E; background-color: #FFFFFF;"><code data-lang="cpp"><span class="giallo-l"><span style="color: #D73A49;">class</span><span style="color: #6F42C1;"> LearningMotionController</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    void</span><span style="color: #6F42C1;"> extractPolicyInfo</span><span>();</span></span>
+<span class="giallo-l"><span>};</span></span></code></pre>
+<p>and immediately wonder: Extract from what? Extract to where?</p>
+<p>Congratulations! You just found a piece of code that is not explicit about its intent. It probably does a lot, but you just don't know what. It's all hidden in the implementation.</p>
+<p>While hiding implementation details is good, it is hard to strike the right balance between exposing details and hiding them. When reading code I like it to be explicit about its intent. Code that tells me what it does. Code that doesn't leave me guessing. Code that is easy to read, understand and most importantly easy to reason about.</p>
+<h2 id="implicit-code-increases-cognitive-load">Implicit code increases <a rel="external" href="https://github.com/zakirullin/cognitive-load">cognitive load</a></h2>
+<p>Consider the following class:</p>
+<pre class="giallo" style="color: #24292E; background-color: #FFFFFF;"><code data-lang="cpp"><span class="giallo-l"><span style="color: #6A737D;">/**</span></span>
+<span class="giallo-l"><span style="color: #6A737D;"> * A class that controls a robotic arm given a learned policy. </span></span>
+<span class="giallo-l"><span style="color: #6A737D;"> */</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">class</span><span style="color: #6F42C1;"> LearningMotionController</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    public:</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    explicit</span><span style="color: #6F42C1;"> LearningMotionController</span><span>(</span><span style="color: #6F42C1;">Parameters</span><span style="color: #E36209;"> params</span><span>);</span></span>
+<span class="giallo-l"><span>    </span></span>
+<span class="giallo-l"><span style="color: #6A737D;">    /**</span></span>
+<span class="giallo-l"><span style="color: #6A737D;">     * Given the parameters in params_ it extracts the policy info and puts</span></span>
+<span class="giallo-l"><span style="color: #6A737D;">     * them into policyInfo_.</span></span>
+<span class="giallo-l"><span style="color: #6A737D;">     */</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    void</span><span style="color: #6F42C1;"> extractPolicyInfo</span><span>();</span></span>
+<span class="giallo-l"><span>      </span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    private:</span></span>
+<span class="giallo-l"><span>      Parameters params_;</span></span>
+<span class="giallo-l"><span>      PolicyInfo policyInfo_;</span></span>
+<span class="giallo-l"><span>};</span></span></code></pre>
+<p>It's great that the docstring on <code>extractPolicyInfo()</code> explains what it does. However, comments tend to become outdated and out of sync with the code very quickly. Additionally, if I only look at the code and ignore the comment, it makes me wonder where this data comes from and where it goes. When we find ourselves in this situation we have a couple options:</p>
+<ol>
+<li>Guess what the method or function does</li>
+<li>Dive one abstraction layer lower and understand the internals</li>
+<li>Ask an LLM to dive one abstraction layer lower and summarize the findings.</li>
+</ol>
+<p>None of these options are great. Option 1 leaves us only with a guess. Option 2 forces extra <a rel="external" href="https://github.com/zakirullin/cognitive-load?tab=readme-ov-file#cognitive-load-is-what-matters">cognitive load</a> on every reader, every time. And Option 3 leaves us experiencing <a rel="external" href="https://syntax-and-servos.ch/blog/agentic-coding-and-unproductive-success/">unproductive success</a>, getting an answer without building real understanding.</p>
+<p>What if we could be more explicit?</p>
+<h2 id="explicit-code-frees-our-mind-up">Explicit code frees our mind up</h2>
+<p>By adapting the interface to the following we communicate the intent:</p>
+<pre class="giallo" style="color: #24292E; background-color: #FFFFFF;"><code data-lang="cpp"><span class="giallo-l"><span style="color: #005CC5;">[[</span><span style="color: #6F42C1;">nodiscard</span><span style="color: #005CC5;">]]</span><span style="color: #6F42C1;"> PolicyInfo extractPolicyInfo</span><span>(</span><span style="color: #D73A49;">const</span><span style="color: #6F42C1;"> Parameters</span><span style="color: #D73A49;">&amp;</span><span style="color: #E36209;"> params</span><span>);</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;">/**</span></span>
+<span class="giallo-l"><span style="color: #6A737D;"> * A class that controls a robotic arm given a learned policy. </span></span>
+<span class="giallo-l"><span style="color: #6A737D;"> */</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">class</span><span style="color: #6F42C1;"> LearningMotionController</span><span> {</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    public:</span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    explicit</span><span style="color: #6F42C1;"> LearningMotionController</span><span>(</span><span style="color: #6F42C1;">Parameters</span><span style="color: #E36209;"> params</span><span>);</span></span>
+<span class="giallo-l"><span>      </span></span>
+<span class="giallo-l"><span style="color: #D73A49;">    private:</span></span>
+<span class="giallo-l"><span>      PolicyInfo policyInfo_;</span></span>
+<span class="giallo-l"><span>};</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #6A737D;">// Implementation</span></span>
+<span class="giallo-l"><span style="color: #6F42C1;">LearningMotionController</span><span>::</span><span style="color: #6F42C1;">LearningMotionController</span><span>(Parameters params)</span></span>
+<span class="giallo-l"><span>    :</span><span style="color: #6F42C1;"> policyInfo_</span><span>(</span><span style="color: #6F42C1;">extractPolicyInfo</span><span>(params)) {}</span></span></code></pre>
+<p>Now we can use <code>extractPolicyInfo(const Parameters&amp; params)</code> in the constructor, using the <code>params</code> parameter. The change is minimal but makes the code explicit and communicates the intent. With a single look at the function declaration we can deduce that it extracts the policy information from the given parameters.</p>
+<p>Beyond communicating the intent better, there are other positive changes:</p>
+<ul>
+<li><strong>Reduce State</strong>: By giving <code>params</code> explicitly to the <code>extractPolicyInfo</code> method in the constructor there is no need to store it in the <code>params_</code> instance variable. Less state is good because it reduces cognitive load. We are also explicit about what we actually use inside <code>LearningMotionController</code>.</li>
+<li><strong>Improved Testability</strong>: The free standing function becomes trivial to test as input and output are easily accessible.</li>
+<li><strong>Possible Dependency Injection</strong>: We could refactor <code>LearningMotionController</code> further such that it only takes what it actually needs: a <code>PolicyInfo</code>.</li>
+</ul>
+<p>The next time you write a method that has no return values, no arguments or both ask yourself: Is the intent of this method obvious to fellow engineers and your future self? If not, then refactor your code to be explicit about its intent!</p>
+
+    </div>
+
+    
+</article>
+
+        </main>
+
+        <footer>
+            <hr>
+<div id="footer-container">
+    <p>Made using <a target="_blank" rel="noopener noreferrer" href="https://github.com/Speyll/anemone">anemone</a> Zola theme</p>
+</div>
+
+        </footer>
+
+        <!-- Move JS to end of body and add defer -->
+        <script src="https://syntax-and-servos.ch/js/script.js" defer></script>
+    </body>
+</html>
