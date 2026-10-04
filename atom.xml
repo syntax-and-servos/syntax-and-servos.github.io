@@ -3,7 +3,7 @@
     <title></title>
     <link href="https://syntax-and-servos.ch/atom.xml" rel="self"/>
     <link href="https:&#x2F;&#x2F;syntax-and-servos.ch"/>
-    <updated>2026-10-04T07:21:30+0000</updated>
+    <updated>2026-10-04T07:23:18+0000</updated>
     <id>https:&#x2F;&#x2F;syntax-and-servos.ch</id>
 
     
@@ -15,6 +15,19 @@
     
     
         
+        
+            
+            <entry>
+                <title>The Accidental Engineer</title>
+                <link href="https:&#x2F;&#x2F;syntax-and-servos.ch&#x2F;blog&#x2F;accidential-engineering&#x2F;"/>
+                <updated>2026-10-04T00:00:00+0000</updated>
+                <id>https:&#x2F;&#x2F;syntax-and-servos.ch&#x2F;blog&#x2F;accidential-engineering&#x2F;</id>
+                <content type="html">&amp;lt;p&amp;gt;I fall for accidental engineering. Every engineer does from time to time. It goes something like this: After an hour long unsuccessful debug session I don&amp;#x27;t really know anymore how to continue. I start to use Google or my currently favorite LLM, which gives me (partially hallucinated) commands that &amp;quot;fix the smoking gun&amp;quot;. I run them. After all, I don&amp;#x27;t really know what to do anymore, right? With some luck the problem disappears. Which of the actions taken did actually resolve the issue? And is it really resolved or did I just treat the symptoms? I don&amp;#x27;t know.&amp;lt;&amp;#x2F;p&amp;gt;
+&amp;lt;p&amp;gt;In the pre-LLM this happened occasionally. However, lately I overhear much more conversations that contain some form of &amp;quot;Claude gave me some commands, I ran them and it fixed the problem.&amp;quot;. &amp;lt;strong&amp;gt;But did it really?&amp;lt;&amp;#x2F;strong&amp;gt;&amp;lt;&amp;#x2F;p&amp;gt;
+&amp;lt;p&amp;gt;LLMs are powerful tools. But with great power comes great responsibility. Don&amp;#x27;t let your hard-earned engineering skills be watered down by the allure of a &amp;quot;quick fix&amp;quot; LLM solution. Do you really understand what solved the problem? If not, you are on the best track to become an &amp;quot;accidental engineer&amp;quot;.&amp;lt;&amp;#x2F;p&amp;gt;
+</content>
+            </entry>
+            
         
             
             <entry>
